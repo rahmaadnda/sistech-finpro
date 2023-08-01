@@ -4,6 +4,7 @@ export default async function handler(req, res) {
     const token = getCookie('token', { req, res })
     const username = getCookie('username', { req, res })
 
+    console.log(token + "token")
 
     if (token == undefined) {
         res.status(401).json([])

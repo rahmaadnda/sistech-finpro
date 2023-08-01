@@ -4,7 +4,7 @@ import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {toast} from "tailwind-toast";
 
-function Profile(articles, username) {
+function Profile(articles) {
     const router = useRouter()
     const [createModal, setCreateModal] = useState(false);
     const [title, setTitle] = useState("");
@@ -15,8 +15,25 @@ function Profile(articles, username) {
     const [newContent, setNewContent] = useState("");
     const [articleId,setArticleId] = useState(0)
     const [loggedIn,setLoggedIn] = useState(false)
+    const username = getCookie("username")
+    const token = getCookie("token")
 
-    console.log(articles)
+    try {
+        fetch('https://sistech-finpro.vercel.app/api/v1/articles/' + username, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' +  token
+            }
+        }).then(res => {
+            console.log(res)
+        })
+        // console.log(result)
+    }
+    catch (error) {
+        console.log(error.message + "error")
+    }
+
 
     useEffect(() => {
         setLoggedIn(hasCookie("token"));
@@ -163,7 +180,7 @@ function Profile(articles, username) {
             <div className="md:container mx-auto">
                 <title>Profile</title>
                 <div className="prose lg:prose-xl py-2 mb-5 text-center">
-                    <h1>Usernames Articles</h1>
+                    <h1>{username}'s Articles</h1>
                 </div>
                 <div className="container text-center">
                     <button
@@ -233,7 +250,7 @@ function Profile(articles, username) {
                                                     value={tags}
                                                     onChange={(e) => setTags(e.target.value.split(" "))}
                                                     required className="rounded"
-                                                    placeholder={"e.g. music, film"}/>
+                                                    placeholder={"e.g. music film"}/>
                                             </div>
                                         </div>
                                         {/*footer*/}
@@ -373,18 +390,6 @@ function Profile(articles, username) {
                 </div>
             </div>
         )
-    }
-}
-
-export async function getServerSideProps() {
-    const result = await fetch(process.env.URL+'/api/getArticles')
-    const data = await result.json()
-    const res = await fetch(process.env.URL+'/api/getUsername')
-    const username = await res.json()
-    console.log(data, username)
-    return {
-        props: { articles: data,
-        username: username},
     }
 }
 
