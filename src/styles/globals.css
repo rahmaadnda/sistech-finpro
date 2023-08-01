@@ -3,16 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  background-color: #0C134F;
+  --foreground-rgb: #0C134F;
+  --background-start-rgb: #1D267D;
+  --background-end-rgb: #1D267D;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: #0C134F;
+    --background-start-rgb: #5C469C;
+    --background-end-rgb: #5C469C;
   }
 }
 
@@ -24,4 +25,70 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.prose {
+  margin: 3%;
+}
+
+h1, h3 {
+  color: #D4ADFC;
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+h2 {
+  font-weight: 550;
+  font-size: x-large;
+}
+
+button {
+  background-color: #5C469C;
+  color: white
+}
+
+.links-button {
+  background-color: #5C469C;
+  color: white;
+  font-weight: 500;
+  margin: 2%;
+  padding: 2%;
+}
+
+.links-button:hover, label {
+  color: #D4ADFC;
+}
+
+Nav {
+  background-color: #D4ADFC;
+  color: #D4ADFC;
+}
+
+.nav-links {
+  color: black;
+}
+
+.nav-links:hover {
+  color: #5C469C;
+}
+
+li {
+  margin: 1%;
+}
+
+container {
+  justify-items: center;
+  align-items: center;
+}
+
+.card {
+  width: 50%;
+  background-color: #D4ADFC;
+}
+
+input {
+  margin: 2%;
+  padding: 0.5%;
+  border-color: #D4ADFC;
+  border-width: thin;
 }
