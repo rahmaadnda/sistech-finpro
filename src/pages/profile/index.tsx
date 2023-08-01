@@ -180,7 +180,7 @@ function Profile(articles) {
             <div className="md:container mx-auto">
                 <title>Profile</title>
                 <div className="prose lg:prose-xl py-2 mb-5 text-center">
-                    <h1>{username}'s Articles</h1>
+                    <h1>{username}&apos;s Articles</h1>
                 </div>
                 <div className="container text-center">
                     <button
