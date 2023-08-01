@@ -5,8 +5,11 @@ export default async function handler(req, res) {
     const username = getCookie('username', { req, res })
 
     if (token == undefined) {
-        res.status(401)
+        res.status(401).json("")
+    }
+    else {
+        res.json(username)
     }
 
-    res.json(username)
+
 }
