@@ -21,6 +21,7 @@ function Profile(articles) {
     try {
         fetch('https://sistech-finpro.vercel.app/api/v1/articles/' + username, {
             method: 'GET',
+            mode: "no-cors",
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' +  token
