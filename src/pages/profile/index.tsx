@@ -5,6 +5,8 @@ import {useEffect, useState} from "react";
 import {toast} from "tailwind-toast";
 
 function Profile(articles) {
+    const data = articles.articles
+
     const router = useRouter()
     const [createModal, setCreateModal] = useState(false);
     const [title, setTitle] = useState("");
@@ -17,29 +19,29 @@ function Profile(articles) {
     const [loggedIn,setLoggedIn] = useState(false)
     const username = getCookie("username")
     const token = getCookie("token")
+    //
+    // console.log(token + username)
 
-    console.log(token + username)
-
-    try {
-        fetch('/api/v1/articles/' + username, {
-            method: 'GET',
-            mode: "no-cors",
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' +  token
-            }
-        }).then(res => {
-            res.json().then(
-                resp => {
-                    console.log(resp)
-                }
-            )
-        })
-        // console.log(result)
-    }
-    catch (error) {
-        console.log(error.message + "error")
-    }
+    // try {
+    //     fetch('/api/v1/articles/' + username, {
+    //         method: 'GET',
+    //         mode: "no-cors",
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: 'Bearer ' +  token
+    //         }
+    //     }).then(res => {
+    //         res.json().then(
+    //             resp => {
+    //                 articles = resp
+    //             }
+    //         )
+    //     })
+    //     // console.log(result)
+    // }
+    // catch (error) {
+    //     console.log(error.message + "error")
+    // }
 
 
     useEffect(() => {
@@ -280,41 +282,45 @@ function Profile(articles) {
                     </>
                 ) : null}
                 <div className="container mx-auto my-10">
-                    {/*{articles.articles.map(article => (*/}
-                    {/*    <div className="card mx-auto my-5 rounded justify-center items-center" key={article.id}>*/}
-                    {/*        <div className="card-body">*/}
-                    {/*            <h2 className="card-title mx-3">*/}
-                    {/*                {article.title}*/}
-                    {/*            </h2>*/}
-                    {/*            <p className="line-clamp-4 mx-3 mt-2">{article.content}</p>*/}
-                    {/*            <div className="px-2 pt-2">*/}
-                    {/*                {article.tag.map(index =>(*/}
-                    {/*                    <span*/}
-                    {/*                        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-1" key={index}>{index}</span>*/}
-                    {/*                ))}*/}
-                    {/*            </div>*/}
-                    {/*            <div className="card-actions justify-between my-2">*/}
-                    {/*                <h5 className="text-xs text-center opacity-50">Last Modified: {new Date(article.updatedAt).toString()} by {article.creator.username}</h5>*/}
-                    {/*                <div className="text-center">*/}
-                    {/*                    <button*/}
-                    {/*                        className="links-button rounded"*/}
-                    {/*                        type="button"*/}
-                    {/*                        onClick={() => {setUpdateModal(true); setArticleId(article.id)}}*/}
-                    {/*                    >*/}
-                    {/*                        Update Article*/}
-                    {/*                    </button>*/}
-                    {/*                    <button*/}
-                    {/*                        type="button"*/}
-                    {/*                        onClick={()=>deleteArticle(article.id)}*/}
-                    {/*                        className="links-button rounded">*/}
-                    {/*                        Delete*/}
-                    {/*                    </button>*/}
-                    {/*                </div>*/}
+                    {
+                        data.map(article => {
+                            if (article.creator.username == username) {
+                                <div className="card mx-auto my-5 rounded justify-center items-center" key={article.id}>
+                                    <div className="card-body">
+                                        <h2 className="card-title mx-3">
+                                            {article.title}
+                                        </h2>
+                                        <p className="line-clamp-4 mx-3 mt-2">{article.content}</p>
+                                        <div className="px-2 pt-2">
+                                            {article.tag.map(index =>(
+                                                <span
+                                                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-1" key={index}>{index}</span>
+                                            ))}
+                                        </div>
+                                        <div className="card-actions justify-between my-2">
+                                            <h5 className="text-xs text-center opacity-50">Last Modified: {new Date(article.updatedAt).toString()} by {article.creator.username}</h5>
+                                            <div className="text-center">
+                                                <button
+                                                    className="links-button rounded"
+                                                    type="button"
+                                                    onClick={() => {setUpdateModal(true); setArticleId(article.id)}}
+                                                >
+                                                    Update Article
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={()=>deleteArticle(article.id)}
+                                                    className="links-button rounded">
+                                                    Delete
+                                                </button>
+                                            </div>
 
-                    {/*            </div>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*))}*/}
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                    })
+                    }
                     {updateModal ? (
                         <>
                             <div
@@ -397,6 +403,19 @@ function Profile(articles) {
                 </div>
             </div>
         )
+    }
+}
+
+export async function getServerSideProps() {
+    const result = await fetch("https://sistech-finpro.vercel.app/api/v1/articles", {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    const data = await result.json()
+    return {
+        props: { articles: data },
     }
 }
 
