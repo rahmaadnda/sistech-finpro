@@ -10,7 +10,7 @@ function Home(articles) {
     const [createModal, setCreateModal] = useState(false);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [tags, setTags] = useState([]);
+    const [tags, setTags] = useState<string[]>([])
     const [updateModal, setUpdateModal] = useState(false);
     const [newTitle, setNewTitle] = useState("");
     const [newContent, setNewContent] = useState("");
