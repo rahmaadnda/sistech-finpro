@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
-import {getCookie, hasCookie, deleteCookie} from "cookies-next";
-import Link from "next/link";
+import {getCookie, hasCookie} from "cookies-next";
 import {toast} from "tailwind-toast";
 import {useRouter} from "next/navigation";
 

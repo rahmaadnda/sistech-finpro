@@ -4,8 +4,98 @@ import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {toast} from "tailwind-toast";
 
-function Profile(articles) {
-    const data = articles.articles
+function Profile() {
+    const username = getCookie("username")
+    const token = getCookie("token")
+    const [articles, setArticles] = useState<object[]>([])
+    //
+    // async function getArt() {
+    //     const result = await fetch("/api/" + username, {
+    //         method: "GET",
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: 'Bearer ' +  token
+    //         }
+    //     })
+    //     const data = await result.json()
+    //     console.log(data)
+    //     setArticles(data)
+    // }
+
+    // useEffect(() =>{
+    //     fetch("/api/" + username, {
+    //         method: "GET",
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: 'Bearer ' +  token
+    //         }
+    //     }).then(result => {
+    //         setArticles(result)
+    //     })
+    //
+    // })
+
+    // const result = fetch("/api/" + username, {
+    //     method: "GET",
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Bearer ' +  token
+    //     }
+    // })
+    // result.then(res=> {
+    //     setArticles(res.json())
+    // })
+
+    // fetch("/api/" + username, {
+    //     method: "GET",
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Bearer ' +  token
+    //     }
+    // }).then(res => {
+    //     console.log(res)
+    //     res.json().then(result =>
+    //     // console.log(result))
+    //     setArticles(result)
+    //     )
+    // })
+    //
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const result = await fetch("/api/" + username, {
+    //             method: "GET",
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: 'Bearer ' +  token
+    //             }
+    //         })
+    //             .then(response => response.json())
+    //             // 4. Setting *dogImage* to the image url that we received from the response above
+    //             .then(data => setArticles(data.data))
+    //     }
+    //
+    //     fetchData();
+    // }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("/api/" + username, {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' +  token
+                    }
+                });
+                const json = await response.json();
+                setArticles(json)
+            } catch (error) {
+                console.log("error", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const router = useRouter()
     const [createModal, setCreateModal] = useState(false);
@@ -17,41 +107,29 @@ function Profile(articles) {
     const [newContent, setNewContent] = useState("");
     const [articleId,setArticleId] = useState(0)
     const [loggedIn,setLoggedIn] = useState(false)
-    const username = getCookie("username")
-    const token = getCookie("token")
-    //
-    // console.log(token + username)
-
-    // try {
-    //     fetch('/api/v1/articles/' + username, {
-    //         method: 'GET',
-    //         mode: "no-cors",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             Authorization: 'Bearer ' +  token
-    //         }
-    //     }).then(res => {
-    //         res.json().then(
-    //             resp => {
-    //                 articles = resp
-    //             }
-    //         )
-    //     })
-    //     // console.log(result)
-    // }
-    // catch (error) {
-    //     console.log(error.message + "error")
-    // }
-
-
+    // const username = getCookie("username")
+    // const token = getCookie("token")
+    const [hasArticles, setHasArticle] = useState(false)
+    // console.log(username)
     useEffect(() => {
         setLoggedIn(hasCookie("token"));
     }, [loggedIn])
+    //
+    // useEffect( () => {
+    //     setArticles(getArt())
+    // }, [articles])
+
+    // console.log(articles)
 
     async function createArticle(e) {
         e.preventDefault();
         try {
             const result = await fetch("/api/createArticle", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' +  token
+                },
                 body: JSON.stringify({
                     "title": title,
                     "content": content,
@@ -99,6 +177,11 @@ function Profile(articles) {
     async function updateArticle(id: Number) {
         try {
             const result = await fetch('/api/articles/'+id, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' +  token
+                },
                 body: JSON.stringify({
                     "title": newTitle,
                     "content": newContent
@@ -115,7 +198,7 @@ function Profile(articles) {
                         positionY: 'bottom',
                         color: 'bg-blue-300'
                     }).show()
-                router.refresh()
+                // router.refresh()
             }
             else {
                 toast()
@@ -145,7 +228,13 @@ function Profile(articles) {
 
     async function deleteArticle(id: Number) {
         try {
-            const result = await fetch('/api/articles/'+id);
+            const result = await fetch('/api/articles/'+id, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' +  token
+                },
+            });
             const data = await result.json();
             if (data.message == 'Article deleted successfully') {
                 toast()
@@ -283,8 +372,7 @@ function Profile(articles) {
                 ) : null}
                 <div className="container mx-auto my-10">
                     {
-                        data.map(article => {
-                            if (article.creator.username == username) {
+                        articles.map(article => {
                                 <div className="card mx-auto my-5 rounded justify-center items-center" key={article.id}>
                                     <div className="card-body">
                                         <h2 className="card-title mx-3">
@@ -318,7 +406,6 @@ function Profile(articles) {
                                         </div>
                                     </div>
                                 </div>
-                            }
                     })
                     }
                     {updateModal ? (
@@ -406,17 +493,5 @@ function Profile(articles) {
     }
 }
 
-export async function getServerSideProps() {
-    const result = await fetch("https://sistech-finpro.vercel.app/api/v1/articles", {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    const data = await result.json()
-    return {
-        props: { articles: data },
-    }
-}
 
 export default Profile;
