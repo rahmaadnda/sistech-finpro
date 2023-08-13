@@ -371,43 +371,42 @@ function Profile() {
                     </>
                 ) : null}
                 <div className="container mx-auto my-10">
-                    {
-                        articles.map(article => {
-                                <div className="card mx-auto my-5 rounded justify-center items-center" key={article.id}>
-                                    <div className="card-body">
-                                        <h2 className="card-title mx-3">
-                                            {article.title}
-                                        </h2>
-                                        <p className="line-clamp-4 mx-3 mt-2">{article.content}</p>
-                                        <div className="px-2 pt-2">
-                                            {article.tag.map(index =>(
-                                                <span
-                                                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-1" key={index}>{index}</span>
-                                            ))}
-                                        </div>
-                                        <div className="card-actions justify-between my-2">
-                                            <h5 className="text-xs text-center opacity-50">Last Modified: {new Date(article.updatedAt).toString()} by {article.creator.username}</h5>
-                                            <div className="text-center">
-                                                <button
-                                                    className="links-button rounded"
-                                                    type="button"
-                                                    onClick={() => {setUpdateModal(true); setArticleId(article.id)}}
-                                                >
-                                                    Update Article
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={()=>deleteArticle(article.id)}
-                                                    className="links-button rounded">
-                                                    Delete
-                                                </button>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                    {articles.map(article => (
+                        <div className="card mx-auto my-5 rounded justify-center items-center" key={article.id}>
+                            <div className="card-body">
+                                <h2 className="card-title mx-3">
+                                    {article.title}
+                                </h2>
+                                <p className="line-clamp-4 mx-3 mt-2">{article.content}</p>
+                                <div className="px-2 pt-2">
+                                    {article.tag.map(index =>(
+                                        <span
+                                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-1" key={index}>{index}</span>
+                                    ))}
                                 </div>
-                    })
-                    }
+                                <div className="card-actions justify-between my-2">
+                                    <h5 className="text-xs text-center opacity-50">Last Modified: {new Date(article.updatedAt).toString()} by {article.creator.username}</h5>
+                                    <div className="text-center">
+                                        <button
+                                            className="links-button rounded"
+                                            type="button"
+                                            onClick={() => {setUpdateModal(true); setArticleId(article.id)}}
+                                        >
+                                            Update Article
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={()=>deleteArticle(article.id)}
+                                            className="links-button rounded">
+                                            Delete
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
                     {updateModal ? (
                         <>
                             <div
