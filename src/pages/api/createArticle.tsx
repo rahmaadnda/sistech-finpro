@@ -4,7 +4,6 @@ export default async function handler(req, res) {
     const { title, content, tags } = req.body;
     const token = getCookie('token', { req, res })
 
-    console.log(token)
     try {
         const result = await fetch('https://sistech-finpro.vercel.app/api/v1/articles', {
             method: 'POST',

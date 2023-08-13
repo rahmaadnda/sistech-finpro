@@ -240,9 +240,9 @@ function Home(articles) {
                                               id="tags"
                                               type="text"
                                               value={tags}
-                                              onChange={(e) => setTags(e.target.value.split(" "))}
+                                              onChange={(e) => setTags((e.target.value).split(","))}
                                               required className="rounded"
-                                          placeholder={"e.g. music film"}/>
+                                          placeholder={"e.g. music,film"}/>
                                       </div>
                               </div>
                               {/*footer*/}
