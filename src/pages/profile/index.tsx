@@ -3,79 +3,23 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {toast} from "tailwind-toast";
+import {array} from "zod";
 
 function Profile() {
+    type Article = {
+        id: number
+        title: string
+        content: string
+        createdAt: string
+        updatedAt: string
+        creator: object
+        tag: string[]
+    }
+
     const username = getCookie("username")
     const token = getCookie("token")
-    const [articles, setArticles] = useState<object[]>([])
-    //
-    // async function getArt() {
-    //     const result = await fetch("/api/" + username, {
-    //         method: "GET",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             Authorization: 'Bearer ' +  token
-    //         }
-    //     })
-    //     const data = await result.json()
-    //     console.log(data)
-    //     setArticles(data)
-    // }
+    const [articles, setArticles] = useState<Article[]>([])
 
-    // useEffect(() =>{
-    //     fetch("/api/" + username, {
-    //         method: "GET",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             Authorization: 'Bearer ' +  token
-    //         }
-    //     }).then(result => {
-    //         setArticles(result)
-    //     })
-    //
-    // })
-
-    // const result = fetch("/api/" + username, {
-    //     method: "GET",
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Bearer ' +  token
-    //     }
-    // })
-    // result.then(res=> {
-    //     setArticles(res.json())
-    // })
-
-    // fetch("/api/" + username, {
-    //     method: "GET",
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Bearer ' +  token
-    //     }
-    // }).then(res => {
-    //     console.log(res)
-    //     res.json().then(result =>
-    //     // console.log(result))
-    //     setArticles(result)
-    //     )
-    // })
-    //
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const result = await fetch("/api/" + username, {
-    //             method: "GET",
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: 'Bearer ' +  token
-    //             }
-    //         })
-    //             .then(response => response.json())
-    //             // 4. Setting *dogImage* to the image url that we received from the response above
-    //             .then(data => setArticles(data.data))
-    //     }
-    //
-    //     fetchData();
-    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -107,22 +51,10 @@ function Profile() {
     const [newContent, setNewContent] = useState("");
     const [articleId,setArticleId] = useState(0)
     const [loggedIn,setLoggedIn] = useState(false)
-    // const username = getCookie("username")
-    // const token = getCookie("token")
-    const [hasArticles, setHasArticle] = useState(false)
-    // console.log(username)
+
     useEffect(() => {
         setLoggedIn(hasCookie("token"));
     }, [loggedIn])
-    //
-    // useEffect( () => {
-    //     setArticles(getArt())
-    // }, [articles])
-
-    // console.log(articles)
-    // articles.map(article => {
-    //     console.log(article.id)
-    // })
 
     async function createArticle(e) {
         e.preventDefault();
