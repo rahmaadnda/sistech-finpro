@@ -12,8 +12,12 @@ function Profile() {
         content: string
         createdAt: string
         updatedAt: string
-        creator: object
+        creator: creator
         tag: string[]
+    }
+
+    type creator = {
+        username: string
     }
 
     const username = getCookie("username")
